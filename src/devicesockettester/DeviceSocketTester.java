@@ -5,9 +5,13 @@
  */
 package devicesockettester;
 
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,6 +21,7 @@ public class DeviceSocketTester {
     private static InetAddress deviceIP;
     private static int devicePort;
     private static int serverPort;
+    private static DatagramSocket serverSocket;
     
     void packetTester(byte[] sendPacket, byte[] receivePacket){
         
@@ -57,6 +62,16 @@ public class DeviceSocketTester {
         }
         return true;
     }
+    
+    public static boolean openSocket(){
+        try {
+            serverSocket = new DatagramSocket(serverPort);
+            return true;
+        } catch (SocketException ex) {
+            System.out.println("Server soket olusturulamadi! -> " + ex);
+            return false;
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -65,6 +80,8 @@ public class DeviceSocketTester {
         while(takeDevice() == false){
             
         }
+        if(openSocket() == false)
+            System.exit(-1);
+        
     }
-    
 }
